@@ -75,12 +75,6 @@ Note: The order is according to which links appear in page. Above command will f
 g4g-dl -h
 
 ```
-##### Example
-```sh
-g4g-dl -l 10 -t DS_G4G -d
-
-```
-The above command will fetch top 10 data structures tutorials from Geeks for Geeks and save them as PDF in DS_G4G directory
 
 
 ### Contributions

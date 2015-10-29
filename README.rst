@@ -103,16 +103,6 @@ Get help
 
     g4g-dl -h
 
-Example
-'''''''
-
-.. code:: sh
-
-    g4g-dl -l 10 -t DS_G4G -d
-
-The above command will fetch top 10 data structures tutorials from Geeks
-for Geeks and save them as PDF in DS\_G4G directory
-
 Contributions
 ~~~~~~~~~~~~~
 
