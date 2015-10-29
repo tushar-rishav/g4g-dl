@@ -12,7 +12,7 @@ __author__ = 'tushar-rishav'
 __version__ = "0.0.1"
 
 
-class TopCoder:
+class Geeks4Geeks:
 
     def __init__(self):
         self.base_url = "http://www.geeksforgeeks.org/"
@@ -80,7 +80,7 @@ class TopCoder:
         subprocess.Popen(args)
 
 
-class Smarty(TopCoder):
+class Smarty(Geeks4Geeks):
 
     def __init__(self, _):
         pass
@@ -133,7 +133,7 @@ def main():
         wkhtmltopdf", shell=True, stdout=subprocess.PIPE).stdout.read()
     assert "wkhtmltopdf" in location_f, "wkhtmltopdf is not installed. Download from www.wkhtmltopdf.org/downloads.html and try again "
 
-    obj = TopCoder()
+    obj = Geeks4Geeks()
     parse(obj)
     obj.fetch()
 
