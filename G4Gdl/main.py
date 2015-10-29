@@ -20,7 +20,8 @@ class Geeks4Geeks:
         self.flag = False
         self.ds = False
         self.algo = True
-        self.limit = 0
+        self.start = 1
+        self.end = 0
         setproctitle('topcoderdl')
 
     def fetch(self):
@@ -29,6 +30,7 @@ class Geeks4Geeks:
                 os.mkdir(self.target_dir)
         except Exception as e:
             print(e)
+            sys.exit(1)
         try:
             self.page = urllib2.urlopen(self.base_url)
         except Exception as e:
@@ -57,19 +59,27 @@ class Geeks4Geeks:
             post = [self.base_url]
 
         with ThreadPoolExecutor(max_workers=4) as executor:
-            if self.limit:
-                future_to_url = {
-                    executor.submit(self.download, url): url for url in post[:self.limit]}
+            l = len(post)
+            if self.start < l and self.end <= l:
+                if self.end and not self.flag:
+                    future_to_url = {
+                        executor.submit(self.download, url): url for url in all_a[self.start - 1:self.end] if url in post}  # Preserve order in Set
+                elif not self.flag:
+                    future_to_url = {
+                        executor.submit(self.download, url): url for url in all_a[self.start - 1:] if url in post}
+                else:
+                    future_to_url = {
+                        executor.submit(self.download, url): url for url in post}   # Handle single post
+                for future in as_completed(future_to_url):
+                    url = future_to_url[future]
             else:
-                future_to_url = {
-                    executor.submit(self.download, url): url for url in post}
-            for future in as_completed(future_to_url):
-                url = future_to_url[future]
+                print("Invalid Start or End positions")
+                sys.exit(1)
 
     def download(self, url):
 
         if not self.flag:
-            post_name = os.path.join(self.target_dir, url.get_text()[:20])  # Limit the name size
+            post_name = os.path.join(self.target_dir, url.get_text()[:30])  # Limit the name size
             post_url = url['href']
         else:
             post_name = os.path.join(
@@ -90,8 +100,10 @@ class Smarty(Geeks4Geeks):
             args = func()
             if args.target:
                 obj.target_dir = args.target
-            if args.limit:
-                obj.limit = args.limit
+            if args.start:
+                obj.start = args.start
+            if args.end:
+                obj.end = args.end
             if args.post:
                 obj.base_url = args.post
                 obj.flag = True
@@ -118,12 +130,14 @@ def parse():
                         type=str)
     parser.add_argument("-p", "--post", help="link for single post",
                         type=str)
-    parser.add_argument("-l", "--limit", help="limit the number of downloads. Count begins from top",
-                        type=int)
     group.add_argument("-d", "--ds", help="Fetch all Data Structures",
                         action="store_true")
     group.add_argument("-a", "--algo", help="Fetch all Algorithms",
                         action="store_true")
+    parser.add_argument("-s", "--start", help="Position to start from. Default is 0 ",
+                        type=int)
+    parser.add_argument("-e", "--end", help="Position to end at. Default is the last link",
+                        type=int)
     args = parser.parse_args()
     return args
 
