@@ -22,7 +22,7 @@ class Geeks4Geeks:
         self.algo = True
         self.start = 1
         self.end = 0
-        setproctitle('topcoderdl')
+        setproctitle('g4gdl')
 
     def fetch(self):
         try:
